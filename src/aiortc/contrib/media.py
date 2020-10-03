@@ -324,7 +324,7 @@ class MediaRecorder:
         self.__container = av.open(file=file, format=format, mode="w", options=options)
         self.__tracks = {}
 
-    def addTrack(self, track):
+    def addTrack(self, track, **kwargs):
         """
         Add a track to be recorded.
 
@@ -345,6 +345,10 @@ class MediaRecorder:
             else:
                 stream = self.__container.add_stream("libx264", rate=30)
                 stream.pix_fmt = "yuv420p"
+                if 'width' in kwargs:
+                    stream.width = kwargs['width']
+                if 'height' in kwargs:
+                    stream.height = kwargs['height']
         self.__tracks[track] = MediaRecorderContext(stream)
 
     async def start(self):
